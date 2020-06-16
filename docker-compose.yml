@@ -34,7 +34,7 @@ services:
       - TZ=America/Sao_Paulo
     stdin_open: true
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - ../pgdata:/var/lib/postgresql/data
     tty: true
     ports:
       - 5432:5432/tcp
