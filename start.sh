@@ -1,4 +1,4 @@
-npm install
-npm run build
-npx sequelize db:migrate
-npm run start
+yarn
+yarn build
+yarn sequelize db:migrate
+yarn start
