@@ -5,8 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: kamaleon/hermes
-    container_name: kamaleon/hermes
+    image: hermes
+    container_name: hermes
     restart: unless-stopped
     env_file: .env
     environment:
