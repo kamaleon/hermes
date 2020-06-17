@@ -15,7 +15,7 @@ services:
       - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
     ports:
-      - "3334:$APP_PORT"
+      - "3333:$APP_PORT"
     volumes:
       - .:/home/node/app
       - node_modules:/home/node/app/node_modules
