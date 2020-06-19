@@ -20,6 +20,7 @@ routes.use(authMiddleware);
 routes.post('/users', UserController.store);
 routes.put('/users', UserController.update);
 
+routes.get('/profiles', ProfileController.index);
 routes.post('/profiles', ProfileController.store);
 routes.put('/profiles/:id', ProfileController.update);
 

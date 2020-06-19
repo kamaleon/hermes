@@ -19,7 +19,7 @@ class MailController {
       return res.status(400).json({ error: 'Validation fails.' });
     }
 
-    const { profile, password } = req.body;
+    const { profile } = req.body;
 
     const profileExists = await Profile.findOne({
       where: { user_id: req.userId, email: profile },
@@ -29,13 +29,7 @@ class MailController {
       return res.status(401).json({ error: 'Unknown profile.' });
     }
 
-    if (!(await profileExists.checkPassword(password))) {
-      return res
-        .status(401)
-        .json({ error: 'Profile password does not match.' });
-    }
-
-    const { to, subject, message } = req.body;
+    const { password, to, subject, message } = req.body;
 
     const attachments =
       req.files &&

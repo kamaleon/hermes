@@ -115,3 +115,6 @@ dist
 
 # Postgres data directory
 pgdata
+
+# Tmp folder
+tmp

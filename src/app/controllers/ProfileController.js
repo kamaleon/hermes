@@ -3,12 +3,20 @@ import * as Yup from 'yup';
 import Profile from '../models/Profile';
 
 class ProfileController {
+  async index(req, res) {
+    const profiles = await Profile.findAll({
+      where: { user_id: req.userId },
+      attributes: ['id', 'email', 'smtp_server', 'smtp_port'],
+    });
+
+    return res.json(profiles);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       email: Yup.string().email().required(),
       smtp_server: Yup.string().required(),
       smtp_port: Yup.string().required(),
-      password: Yup.string().required(),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -45,7 +53,6 @@ class ProfileController {
       email: Yup.string().email(),
       smtp_server: Yup.string(),
       smtp_port: Yup.string(),
-      password: Yup.string(),
     });
 
     if (!(await schema.isValid(req.body))) {
