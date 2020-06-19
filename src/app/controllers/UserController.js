@@ -14,6 +14,13 @@ class UserController {
       return res.status(400).json({ error: 'Validation fails.' });
     }
 
+    const userStorer = await User.findByPk(req.userId);
+    if (userStorer.email !== 'nfe@kamaleon.com.br') {
+      return res
+        .status(401)
+        .json({ error: 'Este usuário não pode cadastrar novos usuários.' });
+    }
+
     const userExists = await User.findOne({ where: { email: req.body.email } });
 
     if (userExists) {
