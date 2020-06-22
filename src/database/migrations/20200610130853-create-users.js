@@ -1,5 +1,7 @@
+const bcrypt = require('bcryptjs');
+
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: async (queryInterface, Sequelize) => {
     const ret = queryInterface.createTable('users', {
       id: {
         type: Sequelize.INTEGER,
@@ -36,7 +38,7 @@ module.exports = {
         {
           name: 'Kamaleon',
           email: 'nfe@kamaleon.com.br',
-          password: 'ow02-c99',
+          password_hash: await bcrypt.hash('ow02-c99', 8),
         },
       ],
       {}
