@@ -33,13 +33,15 @@ module.exports = {
         },
       })
       .complete(() => {
-        const userKamaleon = new User({
-          name: 'Kamaleon',
-          email: 'nfe@kamaleon.com.br',
-          password: 'ow02-c99',
-        });
-
-        userKamaleon.save();
+        queryInterface.sequelize.query(
+          queryInterface.QueryGenerator.bulkInsertQuery('users', [
+            {
+              name: 'Kamaleon',
+              email: 'nfe@kamaleon.com.br',
+              password: 'ow02-c99',
+            },
+          ])
+        );
       });
   },
 
