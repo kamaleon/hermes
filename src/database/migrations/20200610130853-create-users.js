@@ -1,5 +1,3 @@
-import User from '../../app/models/User';
-
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface
