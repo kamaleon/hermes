@@ -9,6 +9,8 @@ module.exports = {
           name: 'Kamaleon',
           email: 'nfe@kamaleon.com.br',
           password_hash: await bcrypt.hash('ow02-c99', 8),
+          created_at: new Date(),
+          updated_at: new Date(),
         },
       ],
       {}
