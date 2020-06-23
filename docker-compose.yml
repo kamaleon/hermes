@@ -6,6 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: hermes
+    user: root:node
     container_name: hermes
     restart: unless-stopped
     env_file: .env
