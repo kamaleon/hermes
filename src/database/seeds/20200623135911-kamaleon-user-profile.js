@@ -1,8 +1,10 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    const user_id = await queryInterface.sequelize.query(
+    const user = await queryInterface.sequelize.query(
       "SELECT id FROM users WHERE email = 'erp@kamaleon.com.br';"
     );
+
+    const usrRow = user[0];
 
     return queryInterface.bulkInsert(
       'profiles',
@@ -11,7 +13,7 @@ module.exports = {
           email: 'erp@kamaleon.com.br',
           smtp_server: 'smtp.gmail.com',
           smtp_port: '465',
-          user_id,
+          user_id: usrRow[0].id,
           created_at: new Date(),
           updated_at: new Date(),
         },
@@ -21,10 +23,12 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    const user_id = await queryInterface.sequelize.query(
+    const user = await queryInterface.sequelize.query(
       "SELECT id FROM users WHERE email = 'erp@kamaleon.com.br';"
     );
 
-    return queryInterface.bulkDelete('profiles', { user_id }, {});
+    const usrRow = user[0];
+
+    return queryInterface.bulkDelete('profiles', { user_id: usrRow[0].id }, {});
   },
 };
