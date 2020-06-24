@@ -8,6 +8,4 @@ COPY package*.json ./
 
 USER node
 
-RUN yarn
-
 COPY --chown=node:node . .
