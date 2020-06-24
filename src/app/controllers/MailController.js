@@ -13,6 +13,7 @@ class MailController {
       to: Yup.string().email().required(),
       subject: Yup.string().required(),
       message: Yup.string().required(),
+      html: Yup.bool(),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -29,7 +30,7 @@ class MailController {
       return res.status(401).json({ error: 'Unknown profile.' });
     }
 
-    const { password, to, subject, message } = req.body;
+    const { password, to, subject, message, html } = req.body;
 
     const attachments =
       req.files &&
@@ -48,12 +49,19 @@ class MailController {
           pass: password,
         },
       },
-      {
-        to,
-        subject,
-        text: message,
-        attachments,
-      }
+      html !== null && html
+        ? {
+            to,
+            subject,
+            html: message,
+            attachments,
+          }
+        : {
+            to,
+            subject,
+            text: message,
+            attachments,
+          }
     );
 
     if (attachments) {
