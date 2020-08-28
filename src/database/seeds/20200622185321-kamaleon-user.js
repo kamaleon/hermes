@@ -5,8 +5,9 @@ module.exports = {
       [
         {
           name: 'Kamaleon',
-          email: 'nfe@kamaleon.com.br',
-          password_hash: '$2a$08$7mOP0n04UoTcP4IGlUkylepZrl2TkH4JXOmHHe4JU/M5lE1KDgm/m',
+          email: 'erp@kamaleon.com.br',
+          password_hash:
+            '$2a$08$7mOP0n04UoTcP4IGlUkylepZrl2TkH4JXOmHHe4JU/M5lE1KDgm/m',
           created_at: new Date(),
           updated_at: new Date(),
         },
@@ -16,6 +17,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('People', null, {});
+    return queryInterface.bulkDelete('Users', null, {});
   },
 };

@@ -15,7 +15,7 @@ class UserController {
     }
 
     const userStorer = await User.findByPk(req.userId);
-    if (userStorer.email !== 'nfe@kamaleon.com.br') {
+    if (userStorer.email !== 'erp@kamaleon.com.br') {
       return res
         .status(401)
         .json({ error: 'Este usuário não pode cadastrar novos usuários.' });
