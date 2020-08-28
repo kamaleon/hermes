@@ -1,14 +1,12 @@
-const bcrypt = require('bcryptjs');
-
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert(
       'users',
       [
         {
           name: 'Kamaleon',
           email: 'nfe@kamaleon.com.br',
-          password_hash: await bcrypt.hash('ow02-c99', 8),
+          password_hash: '$2a$08$7mOP0n04UoTcP4IGlUkylepZrl2TkH4JXOmHHe4JU/M5lE1KDgm/m',
           created_at: new Date(),
           updated_at: new Date(),
         },
