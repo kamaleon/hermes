@@ -43,7 +43,8 @@ class MailController {
       {
         host: profileExists.smtp_server,
         port: profileExists.smtp_port,
-        secure: true,
+        secure: profileExists.smtp_port === '465',
+        requireTLS: true,
         auth: {
           user: profileExists.email,
           pass: password,
