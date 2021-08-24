@@ -7,6 +7,7 @@ import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionController';
 import ProfileController from './app/controllers/ProfileController';
 import MailController from './app/controllers/MailController';
+import TokenVerifierController from './app/controllers/TokenVerifierController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -25,5 +26,7 @@ routes.post('/profiles', ProfileController.store);
 routes.put('/profiles/:id', ProfileController.update);
 
 routes.post('/sendMail', upload.array('attachments'), MailController.store);
+
+routes.get('/tokenVerifier', TokenVerifierController.index);
 
 export default routes;
