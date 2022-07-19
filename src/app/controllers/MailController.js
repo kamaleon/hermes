@@ -52,12 +52,14 @@ class MailController {
       },
       html !== null && html
         ? {
+            from: profile,
             to,
             subject,
             html: message,
             attachments,
           }
         : {
+            from: profile,
             to,
             subject,
             text: message,
