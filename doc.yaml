@@ -1,0 +1,5179 @@
+---
+swagger: '2.0'
+info:
+  description: Api RestFul do Cards
+  version: v1.9.18
+  title: Cards API Payment Homologação
+  termsOfService: http://www.conductor.com.br/cards_api/terms/
+  contact:
+    name: Cards Api
+    url: http://cards-api.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: appslab.connect.dock.tech
+basePath: "/cards-api-payment"
+tags:
+- name: Contato
+  description: Operações Contato
+- name: Venda
+  description: Operações de Venda
+- name: Ajuste
+  description: Operações de ajuste no portador
+- name: Cartao
+  description: Operações com cartão
+- name: Fatura Convênio
+  description: Operações de Fatura de Convênio
+- name: Grupo CNAE
+  description: Operações Grupo CNAE
+- name: Rede Credenciada
+  description: Operações Rede Credenciada
+- name: Portador
+  description: Operações com Portador
+- name: Convenio
+  description: Operações Convênio
+- name: Transacao
+  description: Operações com Portador
+- name: Tipo Contrato
+  description: Operações Tipo Contrato
+- name: Carga de Credito
+  description: Operações Carga de Crédito
+- name: Usuario
+  description: Operações de Usuário
+- name: Wallet
+  description: Operações com Wallet
+- name: Autenticacao
+  description: Operações de ajuste no portador
+- name: Fatura Repasse
+  description: Operações de Fatura de Repasse
+paths:
+  "/api/ajustes":
+    post:
+      tags:
+      - Ajuste
+      summary: Lançamento de Ajuste
+      description: Serviço que realiza o lançamento de ajuste na conta de um Portador
+      operationId: cadastrarLancamentoAjusteUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json;charset=UTF-8
+      parameters:
+      - in: body
+        name: requisicao
+        description: requisicao
+        required: true
+        schema:
+          "$ref": "#/definitions/LancamentoAjusteRequest"
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/LancamentoAjusteResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/ajustes/validaLancamento":
+    post:
+      tags:
+      - Ajuste
+      summary: Validação de Lançamento de Ajuste
+      description: Serviço que realiza a validação de um lançamento de ajuste
+      operationId: validarLancamentoAjusteUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json;charset=UTF-8
+      parameters:
+      - in: body
+        name: requisicao
+        description: requisicao
+        required: true
+        schema:
+          "$ref": "#/definitions/ValidcaoLancamentoAjusteRequest"
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/ValidacaoLancamentoAjusteResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/autenticacao":
+    post:
+      tags:
+      - Autenticacao
+      summary: Autenticação JWT
+      description: Realiza a autenticacao do usuario e retorna o Bearer
+      operationId: gerarTokenUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json;charset=UTF-8
+      parameters:
+      - in: body
+        name: requisicao
+        description: requisicao
+        required: true
+        schema:
+          "$ref": "#/definitions/AutenticacaoRequest"
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/AutenticacaoResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/cargaCredito":
+    get:
+      tags:
+      - Carga de Credito
+      summary: Busca Cargas de Crédito pelo CNPJ de um Convênio
+      description: Este método permite a consulta de cargas de crédito
+      operationId: buscarPorConvenioUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: cnpj
+        in: query
+        description: CNPJ do Convênio
+        required: true
+        type: string
+      - name: dtInicio
+        in: query
+        description: Data de Criação inicial (yyyy-mm-dd)
+        required: false
+        type: string
+      - name: dtFim
+        in: query
+        description: Data de Criação final (yyyy-mm-dd)
+        required: false
+        type: string
+      - name: status
+        in: query
+        description: Status
+        required: false
+        type: string
+      - name: pagina
+        in: query
+        description: Página
+        required: true
+        type: integer
+        default: 0
+        format: int32
+      - name: tamanho
+        in: query
+        description: Tamanho
+        required: true
+        type: integer
+        default: 30
+        format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/CargaCredito"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+    post:
+      tags:
+      - Carga de Credito
+      summary: Cadastro de carga em lote
+      description: Método que realiza a carga de crédito/débito para vários portadores.
+      operationId: cadastrarCargaCreditoUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json;charset=UTF-8
+      parameters:
+      - in: body
+        name: carga
+        description: carga
+        required: true
+        schema:
+          "$ref": "#/definitions/CargaLoteRequest"
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/CargaCredito"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/cargaCredito/{id}":
+    get:
+      tags:
+      - Carga de Credito
+      summary: Busca uma carga de crédito pelo ID
+      description: Este método permite a consulta de uma carga de crédito através
+        do ID
+      operationId: buscarPeloIdUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: ID da Carga de Crédito a ser consultada
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/CargaCredito"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/cargaCredito/{id}/pagamentos":
+    get:
+      tags:
+      - Carga de Credito
+      summary: Busca os pagamentos de uma Carga de Crédito
+      description: Este método permite a consulta dos pagamentos pertencentes a uma
+        carga de crédito
+      operationId: buscarItensPagamentoUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: ID da Carga de Crédito
+        required: true
+        type: integer
+        format: int64
+      - name: pagina
+        in: query
+        description: Página
+        required: true
+        type: integer
+        default: 0
+        format: int32
+      - name: tamanho
+        in: query
+        description: Tamanho
+        required: true
+        type: integer
+        default: 30
+        format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/ItemPagamentoCargaCredito"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/cartoes":
+    post:
+      tags:
+      - Cartao
+      summary: Alterar senha do cartão
+      description: Este método altera a senha do cartao do portador titular.
+      operationId: alterarSenhaCartaoUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json;charset=UTF-8
+      parameters:
+      - in: body
+        name: request
+        description: request
+        required: true
+        schema:
+          "$ref": "#/definitions/AlteracaoSenhaCartaoRequest"
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/cartoes/bloqueio/{id_cartao}":
+    patch:
+      tags:
+      - Cartao
+      summary: Bloqueia um cartão temporariamente
+      description: Este método bloqueia um determinado cartão temporariamente a partir
+        de seu (id).
+      operationId: bloquearCartaoTemporarioUsingPATCH
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id_cartao
+        in: path
+        description: Código de Identificação do Cartão (id).
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/DefaultResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/cartoes/bloqueio_permanente":
+    patch:
+      tags:
+      - Cartao
+      summary: Bloqueia um cartão permanentemente
+      description: Este método bloqueia um determinado cartão permanentemente a partir
+        de seu (id).
+      operationId: bloquearCartaoPermanenteUsingPATCH
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id_cartao
+        in: query
+        description: Código de Identificação do Cartão (id).
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/DefaultResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/cartoes/buscar/{id}":
+    get:
+      tags:
+      - Cartao
+      summary: Busca cartão.
+      description: Este método retorna informações sobre um determinado cartão.
+      operationId: getUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Código de Identificação do Cartão (id).
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/CartaoLojaResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/cartoes/desbloqueio":
+    patch:
+      tags:
+      - Cartao
+      summary: Desbloqueia um cartão
+      description: Este método desbloqueia um determinado cartão que foi bloqueado
+        temporariamente a partir de seu (id).
+      operationId: desbloquearCartaoTemporarioUsingPATCH
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id_cartao
+        in: query
+        description: Código de Identificação do Cartão (id).
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: request
+        description: request
+        required: false
+        schema:
+          "$ref": "#/definitions/SenhaCartaoRequest"
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/DefaultResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/cartoes/incluirCartaoParaEmbossing":
+    post:
+      tags:
+      - Cartao
+      summary: Incluir cartão para embossing
+      description: Inlcuir cartão para embossing.
+      operationId: incluirParaEmbossingUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: idCartao
+        in: query
+        description: ID do Cartão para Embossing
+        required: true
+        type: integer
+        format: int64
+      - name: idFilial
+        in: query
+        description: ID do Filial
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/DefaultResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/cartoes/informacoes/listarCartoesCadastroLiberado":
+    get:
+      tags:
+      - Cartao
+      summary: 'Listagem de cartões liberados apos bloqueio de cadastro '
+      description: Informações de cartões liberados.
+      operationId: listarCartoesCadastroLiberadoUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id_loja
+        in: query
+        description: Código de Identificação do Convênio
+        required: false
+        type: integer
+        format: int64
+      - name: data_inicial
+        in: query
+        description: Data Inicial yyyy-MM-dd
+        required: true
+        type: string
+      - name: data_final
+        in: query
+        description: Data Final yyyy-MM-dd
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/DesbloqueioCartao"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/cartoes/informacoes/saldo/cartao/{numero_cartao}":
+    get:
+      tags:
+      - Cartao
+      summary: Consulta saldos e limites pelo número do cartão
+      description: Informações como saldos e limites.
+      operationId: consultaExtratoClienteUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: numero_cartao
+        in: path
+        description: Número do Cartão
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/ExtratoClienteResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/cartoes/informacoes/saldo/{id_cartao}":
+    get:
+      tags:
+      - Cartao
+      summary: 'Consulta saldos e limites '
+      description: Informações como saldos e limites.
+      operationId: consultaExtratoClienteUsingGET_1
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id_cartao
+        in: path
+        description: Código de Identificação do Cartão
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/ExtratoClienteResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/cartoes/movimentacoes/extrato":
+    get:
+      tags:
+      - Cartao
+      summary: Extrato movimentação de um cartão
+      description: Este método permite que sejam listadas as movimentações de um determinado
+        cartão.
+      operationId: extratoMovimentacaoUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id_cartao
+        in: query
+        description: Código de Identificação do Cartão do Cliente
+        required: true
+        type: integer
+        format: int64
+      - name: data_inicial
+        in: query
+        description: Data Inicial yyyy-MM-dd
+        required: true
+        type: string
+      - name: data_final
+        in: query
+        description: Data Final yyyy-MM-dd
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/ExtratoMovimentacaoResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/cartoes/novaSenha":
+    post:
+      tags:
+      - Cartao
+      summary: Solicitar nova senha do cartão (utilizado pela URA)
+      description: Este método solicita nova senha do cartao do portador titular,
+        utilizado pela URA
+      operationId: alterarSenhaCartaoUraUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json;charset=UTF-8
+      parameters:
+      - in: body
+        name: request
+        description: request
+        required: true
+        schema:
+          "$ref": "#/definitions/AlteracaoSenhaCartaoURARequest"
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/cartoes/senha/recuperar/{id_cartao}":
+    get:
+      tags:
+      - Cartao
+      summary: Recuperar Senha de Cartão
+      description: Este método permite que seja recuperado a senha de um determinado
+        cartão.
+      operationId: recuperarSenhaCartaoUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id_cartao
+        in: path
+        description: Código de Identificação do Cartão (id).
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/DefaultResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/cartoes/trocaCartao/{id_cartao}":
+    put:
+      tags:
+      - Cartao
+      summary: Troca um cartão
+      description: Este método troca um cartão por um novo pelo ID (id).
+      operationId: trocarCartaoUsingPUT
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id_cartao
+        in: path
+        description: Código de Identificação do Cartão (id).
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/DefaultResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/cartoes/trocaCartaoValido/{id_cartao}":
+    put:
+      tags:
+      - Cartao
+      summary: Troca um cartão
+      description: Este método troca um cartão por um novo pelo ID (id). O novo cartão
+        será gerado com status Valido
+      operationId: trocarCartaoValidoUsingPUT
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id_cartao
+        in: path
+        description: Código de Identificação do Cartão (id).
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/CartaoLojaResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/cartoes/validar-token/{id}":
+    get:
+      tags:
+      - Cartao
+      summary: Validar Token.
+      description: Este método valida um token vcc de um determinado cartão.
+      operationId: validarTokenUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: token
+        in: header
+        description: Token
+        required: true
+        type: string
+      - name: id
+        in: path
+        description: Código de Identificação do Cartão (id).
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/CartaoLojaResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/cartoes/{cpf}":
+    get:
+      tags:
+      - Cartao
+      summary: Lista de Cartões por CPF
+      description: Este método permite que sejam listados os cartões de um determinado
+        portador na base do emissor.
+      operationId: listarCartoesPorCpfUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: cpf
+        in: path
+        description: CPF do cliente
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/Cartao"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/contato":
+    get:
+      tags:
+      - Contato
+      summary: Busca contato por CPF
+      description: Este método permite a consulta de contatos através do CPF
+      operationId: buscarPorCpfUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: cpf
+        in: query
+        description: CPF do Contato a ser consultado
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/Contato"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/convenio":
+    get:
+      tags:
+      - Convenio
+      summary: Busca convênios pelo CNPJ
+      description: Este método permite a consulta de convênios através do CNPJ
+      operationId: buscarPeloCnpjUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: cnpj
+        in: query
+        description: CNPJ do Convênio a ser consultado
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/Convênio"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/convenio/cadastraSetor":
+    post:
+      tags:
+      - Convenio
+      summary: Cadastra um setor
+      description: Este método permite o cadastro de um setor para um convênio
+      operationId: buscarPeloIdUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: setor
+        description: setor
+        required: true
+        schema:
+          "$ref": "#/definitions/SetorRequest"
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/Convênio"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/convenio/enderecoComplementar":
+    post:
+      tags:
+      - Convenio
+      summary: Cadastra um endereço complementar
+      description: Este método permite o cadastro de um endereço complementar para
+        um convênio
+      operationId: buscarPeloIdUsingPOST_1
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: endereco
+        description: endereco
+        required: true
+        schema:
+          "$ref": "#/definitions/EnderecoComplementarConvenioRequest"
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/Convênio"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/convenio/{id}":
+    get:
+      tags:
+      - Convenio
+      summary: Busca um convênio pelo ID
+      description: Este método permite a consulta de um convênio através do ID
+      operationId: buscarPeloIdUsingGET_1
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: ID do Convênio a ser consultado
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/Convênio"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/faturaConvenio":
+    get:
+      tags:
+      - Fatura Convênio
+      summary: Busca Faturas de Convênio.
+      description: Este método permite a consulta de faturas de convênio com base
+        em filtros.
+      operationId: buscarPorFiltroUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: idConvenio
+        in: query
+        description: Id do Convênio
+        required: true
+        type: string
+      - name: dtCorteInicial
+        in: query
+        description: Data de corte inicial (yyyy-mm-dd)
+        required: false
+        type: string
+      - name: dtCorteFinal
+        in: query
+        description: Data de corte final (yyyy-mm-dd)
+        required: false
+        type: string
+      - name: dtVencimentoInicial
+        in: query
+        description: Data de vencimento inicial (yyyy-mm-dd)
+        required: false
+        type: string
+      - name: dtVencimentoFinal
+        in: query
+        description: Data de vencimento final (yyyy-mm-dd)
+        required: false
+        type: string
+      - name: pagina
+        in: query
+        description: Página
+        required: true
+        type: integer
+        default: 0
+        format: int32
+      - name: tamanho
+        in: query
+        description: Tamanho
+        required: true
+        type: integer
+        default: 30
+        format: int32
+      responses:
+        '200':
+          description: Sucesso.
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/FaturaConvenio"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/faturaConvenio/{id}/ajustes":
+    get:
+      tags:
+      - Fatura Convênio
+      summary: Busca ajustes de uma Fatura de Convênio.
+      description: Este método permite a busca de ajustes de uma Fatura de Convênio
+        a partir do Id da Fatura.
+      operationId: buscarAjustesUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Id da Fatura de Convênio
+        required: true
+        type: integer
+        format: int64
+      - name: pagina
+        in: query
+        description: Página
+        required: true
+        type: integer
+        default: 0
+        format: int32
+      - name: tamanho
+        in: query
+        description: Tamanho
+        required: true
+        type: integer
+        default: 30
+        format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/AjusteFaturaConvenio"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/faturaConvenio/{id}/faturasPortador":
+    get:
+      tags:
+      - Fatura Convênio
+      summary: Lista as faturas dos portadores.
+      description: Este método permite a listagem de todas as faturas de um portados
+        vinculados a uma fatura de convênio.
+      operationId: listarFaturasPorFaturaConvenioUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Id da Fatura de Convênio
+        required: true
+        type: integer
+        format: int64
+      - name: pagina
+        in: query
+        description: Página
+        required: true
+        type: integer
+        default: 0
+        format: int32
+      - name: tamanho
+        in: query
+        description: Tamanho
+        required: true
+        type: integer
+        default: 30
+        format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/FaturaRepasse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/faturaConvenio/{id}/pagamentos":
+    get:
+      tags:
+      - Fatura Convênio
+      summary: Busca uma fatura de Convênio.
+      description: Este método permite a consulta de uma fatura de Convênio a partir
+        do Id de Fatura Convênio.
+      operationId: buscarPorIdFaturaConvenioUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Id da Fatura de Convênio
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/PagamentoFaturaConvenio"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/faturaRepasse":
+    get:
+      tags:
+      - Fatura Repasse
+      summary: Busca Faturas de Repasse de uma Rede a partir de filtros.
+      description: Este método permite a consulta de faturas de repasse.
+      operationId: buscarPorFiltroUsingGET_1
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: cnpj
+        in: query
+        description: CNPJ da Rede
+        required: true
+        type: string
+      - name: dtCorteInicial
+        in: query
+        description: Data de corte inicial (yyyy-mm-dd)
+        required: false
+        type: string
+      - name: dtCorteFinal
+        in: query
+        description: Data de corte final (yyyy-mm-dd)
+        required: false
+        type: string
+      - name: dtVencimentoInicial
+        in: query
+        description: Data de vencimento inicial (yyyy-mm-dd)
+        required: false
+        type: string
+      - name: dtVencimentoFinal
+        in: query
+        description: Data de vencimento final (yyyy-mm-dd)
+        required: false
+        type: string
+      - name: pagina
+        in: query
+        description: Página
+        required: true
+        type: integer
+        default: 0
+        format: int32
+      - name: tamanho
+        in: query
+        description: Tamanho
+        required: true
+        type: integer
+        default: 30
+        format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/FaturaRepasse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/faturaRepasse/{id}":
+    get:
+      tags:
+      - Fatura Repasse
+      summary: Busca uma fatura de repasse.
+      description: Este método permite a consulta de uma fatura de repasse.
+      operationId: buscarPorIdUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Id da Fatura de Repasse
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/FaturaRepasse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/faturaRepasse/{id}/lancamentos":
+    get:
+      tags:
+      - Fatura Repasse
+      summary: Busca os lançamentos de uma fatura de repasse.
+      description: Este método permite a consulta de lançamentos de uma fatura de
+        repasse.
+      operationId: buscarLancamentosUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Id da Fatura de Repasse
+        required: true
+        type: integer
+        format: int64
+      - name: pagina
+        in: query
+        description: Página
+        required: true
+        type: integer
+        default: 0
+        format: int32
+      - name: tamanho
+        in: query
+        description: Tamanho
+        required: true
+        type: integer
+        default: 30
+        format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/LancamentoRepasse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/grupoCnae/{id}":
+    get:
+      tags:
+      - Grupo CNAE
+      summary: Busca Grupos Cnaes pelo Id
+      description: Este método permite a consulta de Grupos de CNAE através do Id
+      operationId: buscarPorIdUsingGET_1
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Id do Grupo de CNAE a ser consultado
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/GrupoCnaeResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/portadores":
+    post:
+      tags:
+      - Portador
+      summary: Cadastro de portador
+      description: Método que realiza o cadastro de um portador.
+      operationId: cadastrarClienteUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json;charset=UTF-8
+      parameters:
+      - in: body
+        name: portador
+        description: portador
+        required: true
+        schema:
+          "$ref": "#/definitions/CadastroPortadorRequest"
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/CadastroPortadorResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/portadores/alteracaoCadastro":
+    put:
+      tags:
+      - Portador
+      summary: Alteracao de portador
+      description: Método que realiza a alteração de um portador.
+      operationId: alterarClienteUsingPUT
+      consumes:
+      - application/json
+      produces:
+      - application/json;charset=UTF-8
+      parameters:
+      - in: body
+        name: portador
+        description: portador
+        required: true
+        schema:
+          "$ref": "#/definitions/AlteracaoPortadorMinimoRequest"
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/CadastroPortadorResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/portadores/alteracaoLimite/":
+    put:
+      tags:
+      - Portador
+      summary: Alteracao de limite de portador
+      description: Método que realiza a alteração de limite de um portador.
+      operationId: alterarLimiteUsingPUT
+      consumes:
+      - application/json
+      produces:
+      - application/json;charset=UTF-8
+      parameters:
+      - in: body
+        name: portador
+        description: portador
+        required: true
+        schema:
+          "$ref": "#/definitions/AlteracaoLimiteRequest"
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/CadastroPortadorResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/portadores/alteracaoMatricula/":
+    put:
+      tags:
+      - Portador
+      summary: Alteracao de matricula de portador
+      description: Método que realiza a alteração de matricula de um portador.
+      operationId: alterarMatriculaUsingPUT
+      consumes:
+      - application/json
+      produces:
+      - application/json;charset=UTF-8
+      parameters:
+      - name: id
+        in: query
+        description: ID do cliente
+        required: true
+        type: integer
+        format: int64
+      - name: matricula
+        in: query
+        description: Matricula do cliente
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/CadastroPortadorResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/portadores/bloqueioCliente":
+    post:
+      tags:
+      - Portador
+      summary: Bloqueio de portador
+      description: Este método bloqueia um determinado portador a partir de seu (id).
+      operationId: bloquearClienteUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id_cliente
+        in: query
+        description: Código de Identificação da Conta (id).
+        required: true
+        type: integer
+        format: int64
+      - name: id_tipo_bloqueio
+        in: query
+        description: Código do tipo de bloqueio (id).
+        required: true
+        type: integer
+        format: int64
+      - name: obs_bloqueio
+        in: query
+        description: Observação do bloqueio do cliente.
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/DefaultResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/portadores/bloqueioClienteConvenio":
+    get:
+      tags:
+      - Portador
+      summary: Bloqueio de portador por CPF
+      description: Este método bloqueia um determinado portador a partir de seu cpf
+        e convênio.
+      operationId: bloquearClienteConvenioUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: cpf
+        in: query
+        description: CPF do cliente
+        required: true
+        type: string
+      - name: id_loja
+        in: query
+        description: Código de Identificação do Convênio
+        required: true
+        type: integer
+        format: int64
+      - name: id_tipo_bloqueio
+        in: query
+        description: Código do tipo de bloqueio (id).
+        required: true
+        type: integer
+        format: int64
+      - name: obs_bloqueio
+        in: query
+        description: Observação do bloqueio do cliente.
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/DefaultResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/portadores/cadastroMinimo":
+    post:
+      tags:
+      - Portador
+      summary: Cadastro minimo de portador
+      description: Método que realiza o cadastro minimo de um portador.
+      operationId: cadastrarClienteMinimoUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json;charset=UTF-8
+      parameters:
+      - in: body
+        name: portador
+        description: portador
+        required: true
+        schema:
+          "$ref": "#/definitions/PortadorMinimoRequest"
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/CadastroPortadorResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/portadores/desbloqueioCliente":
+    post:
+      tags:
+      - Portador
+      summary: Desbloqueio de portador
+      description: Este método desbloqueia um determinado portador a partir de seu
+        (id).
+      operationId: desbloquearClienteUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id_cliente
+        in: query
+        description: Código de Identificação da Conta (id).
+        required: true
+        type: integer
+        format: int64
+      - name: obs_desbloqueio
+        in: query
+        description: Observação do desbloqueio do cliente.
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/DefaultResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/portadores/desbloqueioClienteConvenio":
+    get:
+      tags:
+      - Portador
+      summary: Desbloqueio de portador por CPF
+      description: Este método desbloqueia um determinado portador a partir de seu
+        cpf e convênio.
+      operationId: desbloquearClienteConvenioUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: cpf
+        in: query
+        description: CPF do cliente
+        required: true
+        type: string
+      - name: id_loja
+        in: query
+        description: Código de Identificação do Convênio
+        required: true
+        type: integer
+        format: int64
+      - name: obs_desbloqueio
+        in: query
+        description: Observação do desbloqueio do cliente.
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/DefaultResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/portadores/fatura/listarFaturasPortador":
+    get:
+      tags:
+      - Portador
+      summary: Listagem de faturas do portador
+      description: Informações de faturas dos portadores agrupados por convênio.
+      operationId: listarFaturasPortadorUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id_loja
+        in: query
+        description: Código de Identificação do Convênio
+        required: false
+        type: integer
+        format: int64
+      - name: data_inicial
+        in: query
+        description: Data Inicial yyyy-MM-dd
+        required: true
+        type: string
+      - name: data_final
+        in: query
+        description: Data Final yyyy-MM-dd
+        required: true
+        type: string
+      - name: page
+        in: query
+        description: Página solicitada (Default = 0)
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/FaturasPortador"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/portadores/historico/{id}":
+    get:
+      tags:
+      - Portador
+      summary: Histórico de utilização do portador
+      description: Informações como compras, pagamentos e bloqueios.
+      operationId: historicoUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: ID do cliente
+        required: true
+        type: integer
+        format: int64
+      - name: data_inicial
+        in: query
+        description: Data Inicial yyyy-MM-dd
+        required: true
+        type: string
+      - name: data_final
+        in: query
+        description: Data Final yyyy-MM-dd
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/HistoricoResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/portadores/informacoes":
+    get:
+      tags:
+      - Portador
+      summary: Consulta de portador
+      description: Informações como dados pessoais, saldos e limites.
+      operationId: consultaClientePorParametrosUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: cpf
+        in: query
+        description: CPF do Portador
+        required: true
+        type: string
+      - name: idTipoContrato
+        in: query
+        description: ID do Tipo de Contrato
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/ConsultarClienteResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/portadores/informacoes/{id}":
+    get:
+      tags:
+      - Portador
+      summary: Consulta de portador
+      description: Informações como saldos, limites, valor da fatura, dia do corte
+        e melhor dia para compra.
+      operationId: consultaClienteUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: ID do cliente
+        required: true
+        type: integer
+        format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/ConsultarClienteResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/redeCredenciada":
+    get:
+      tags:
+      - Rede Credenciada
+      summary: Busca redes credenciadas pelo CNPJ
+      description: Este método permite a consulta de redes credenciadas através do
+        CNPJ
+      operationId: buscarPeloCnpjUsingGET_1
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: cnpj
+        in: query
+        description: CNPJ da Rede Credenciada a ser consultada
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/Rede Credenciada"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+    post:
+      tags:
+      - Rede Credenciada
+      summary: Cadastro Rede Credenciada
+      description: Realiza o cadastro de uma Rede Credenciada.
+      operationId: cadastrarRedeUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: CadastroRedeReq
+        description: Cadastro RedeCredenciada
+        required: false
+        schema:
+          "$ref": "#/definitions/Cadastro RedeCredenciada"
+      responses:
+        '200':
+          description: Sucesso.
+          schema:
+            "$ref": "#/definitions/Rede Credenciada"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/redeCredenciada/{id}":
+    get:
+      tags:
+      - Rede Credenciada
+      summary: Busca uma rede credenciada pelo ID
+      description: Este método permite a consulta de um rede credenciada através do
+        ID
+      operationId: buscarPeloIdUsingGET_2
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: ID da Rede Credenciada a ser consultada
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/Rede Credenciada"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/tipoContrato":
+    get:
+      tags:
+      - Tipo Contrato
+      summary: Busca tipos de contrato pela Descrição
+      description: Este método permite a consulta de tipos de contrato através da
+        descrição
+      operationId: buscarPelaDescricaoUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: descricao
+        in: query
+        description: Descrição
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/TipoContrato"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/tipoContrato/{id}":
+    get:
+      tags:
+      - Tipo Contrato
+      summary: Busca um tipo de contrato pelo ID
+      description: Este método permite a consulta de um tipo de contrato através do
+        ID
+      operationId: buscarPeloIdUsingGET_3
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: ID do Tipo de Contrato a ser consultado
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/TipoContrato"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/transacao":
+    post:
+      tags:
+      - Transacao
+      summary: Cash In/Cash Out
+      description: Serviço que realiza o Cash In ou Cash Out
+      operationId: cashInCashOutUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json;charset=UTF-8
+      parameters:
+      - in: body
+        name: requisicao
+        description: requisicao
+        required: true
+        schema:
+          "$ref": "#/definitions/TransacaoRequest"
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/TransacaoResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/transacao/cancelar/":
+    post:
+      tags:
+      - Transacao
+      summary: Cancelamento de Transação
+      description: Serviço que possibilita o cancelamento de uma transação.
+      operationId: cancelarTransacaoUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json;charset=UTF-8
+      parameters:
+      - in: body
+        name: requisicao
+        description: requisicao
+        required: true
+        schema:
+          "$ref": "#/definitions/CancelarTransacaoRequest"
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/TransacaoResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/transacao/transacoes/chave/geracao":
+    post:
+      tags:
+      - Transacao
+      summary: Geração de chave de transação
+      description: Serviço responsável para geração de chaves de transação. Este serviço
+        deverá ser utilizado antes de realizar qualquer transação.
+      operationId: gerarChaveTransacaoUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: login
+        in: query
+        description: Login.
+        required: true
+        type: string
+      - name: senha
+        in: query
+        description: Senha
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/DefaultResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/transacao/transacoes/consulta":
+    get:
+      tags:
+      - Transacao
+      summary: Consultar Transações
+      description: Serviço responsável para consulta de transações, limitada a 1 dia.
+      operationId: consultarTransacoesUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: data_transacao
+        in: query
+        description: Data da transação yyyy-MM-dd
+        required: true
+        type: string
+      - name: cnpj
+        in: query
+        description: CNPJ da Rede Credenciada.
+        required: false
+        type: string
+      - name: id_cartao
+        in: query
+        description: Código de Identificação do Cartão (id).
+        required: false
+        type: integer
+        format: int64
+      - name: nsuOrigem
+        in: query
+        description: Número de identificação da transação.
+        required: false
+        type: integer
+        format: int64
+      - name: nsuAutorizador
+        in: query
+        description: NSU do Host.
+        required: false
+        type: integer
+        format: int64
+      - name: page
+        in: query
+        description: Página solicitada (Default = 0)
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/TransacaoResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/transacao/transacoes/extratoConvenio":
+    get:
+      tags:
+      - Transacao
+      summary: Extrato de  movimentações do convênio
+      description: Serviço para listagem das movimentações dos cartões associados
+        a um convênio.
+      operationId: extratoMovimentacoesConvenioUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id_convenio
+        in: query
+        description: Código do convênio
+        required: true
+        type: integer
+        format: int64
+      - name: data_inicial
+        in: query
+        description: Data Inicial yyyy-MM-dd'T'hh:mm:ss
+        required: true
+        type: string
+        format: date-time
+      - name: data_final
+        in: query
+        description: Data Final yyyy-MM-dd'T'hh:mm:ss
+        required: true
+        type: string
+        format: date-time
+      - name: page
+        in: query
+        description: Página solicitada (Default = 0)
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/ExtratoMovClienteResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/usuario":
+    post:
+      tags:
+      - Usuario
+      summary: Cadastra um usuário para ser utilizado na Api.
+      description: Este serviço cadastra um usuário.
+      operationId: cadastrarUsuarioUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: usuarioReq
+        description: Usuario Request
+        required: false
+        schema:
+          "$ref": "#/definitions/Usuario Request"
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+        '201':
+          description: Criado.
+          schema:
+            "$ref": "#/definitions/Usuario Response"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+    delete:
+      tags:
+      - Usuario
+      summary: Remove um usuário.
+      description: Este serviço remove um usuário da Api.
+      operationId: removerUsuarioUsingDELETE
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: delUserReq
+        description: Delete User Request
+        required: false
+        schema:
+          "$ref": "#/definitions/Reset de Senha Request"
+      responses:
+        '200':
+          description: Sucesso.
+          schema:
+            "$ref": "#/definitions/DefaultResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/usuario/login":
+    post:
+      tags:
+      - Usuario
+      summary: Autentica um usuário para ser utilizado na Api.
+      description: Este serviço realiza a autenticação de um usuário.
+      operationId: autenticarUsuarioUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: usuarioReq
+        description: Usuario Auth Request
+        required: false
+        schema:
+          "$ref": "#/definitions/Usuario Autenticação Request"
+      responses:
+        '200':
+          description: Ok.
+          schema:
+            "$ref": "#/definitions/Usuario Response"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/usuario/novaSenha":
+    post:
+      tags:
+      - Usuario
+      summary: Reseta a senha de um usuário.
+      description: Este serviço realiza a troca da senha de um usuário da Api. Enviando
+        a ele uma nova senha por email.
+      operationId: resetarSenhaUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: resetSenhaReq
+        description: Reset de Senha Request
+        required: false
+        schema:
+          "$ref": "#/definitions/Reset de Senha Request"
+      responses:
+        '200':
+          description: Sucesso.
+          schema:
+            "$ref": "#/definitions/ResetSenhaUsuarioResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/usuario/salvarDeviceToken":
+    post:
+      tags:
+      - Usuario
+      summary: Salva Device Token
+      description: Este método salva devices token do usuario.
+      operationId: salvarDeviceTokenUsingPOST
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: request
+        description: request
+        required: true
+        schema:
+          "$ref": "#/definitions/TokenNotification"
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/DefaultResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/usuario/{id}":
+    put:
+      tags:
+      - Usuario
+      summary: Altera os dados cadastrais de um usuário.
+      description: Este serviço realiza a alteração de dados cadastrais de um usuário.
+      operationId: alterarDadosCadastraisUsuarioUsingPUT
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Id do Usuário
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: alteracaoUsuarioReq
+        description: Alteração Usuário Request
+        required: false
+        schema:
+          "$ref": "#/definitions/Alteração Usuario Request"
+      responses:
+        '200':
+          description: Sucesso.
+          schema:
+            "$ref": "#/definitions/Usuario Response"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/usuario/{id}/senha":
+    put:
+      tags:
+      - Usuario
+      summary: Altera a senha de um usuário.
+      description: Este serviço realiza a troca da senha de um usuário da Api.
+      operationId: mudarSenhaUsingPUT
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Id do Usuário
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: trocaSenhaReq
+        description: Troca de Senha Request
+        required: false
+        schema:
+          "$ref": "#/definitions/Troca de Senha Request"
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+        '204':
+          description: Sucesso.
+          schema:
+            type: object
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/venda":
+    get:
+      tags:
+      - Venda
+      summary: Busca Vendas a partir de filtros.
+      description: Este método permite a consulta de vendas.
+      operationId: buscarPorFiltroUsingGET_2
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: cnpj
+        in: query
+        description: CNPJ da Rede
+        required: true
+        type: string
+      - name: dtInicio
+        in: query
+        description: Data da venda inicial (yyyy-mm-dd)
+        required: false
+        type: string
+      - name: dtFim
+        in: query
+        description: Data da venda final (yyyy-mm-dd)
+        required: false
+        type: string
+      - name: pagina
+        in: query
+        description: Página
+        required: true
+        type: integer
+        default: 0
+        format: int32
+      - name: tamanho
+        in: query
+        description: Tamanho
+        required: true
+        type: integer
+        default: 15
+        format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/Venda"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/venda/{id}":
+    get:
+      tags:
+      - Venda
+      summary: Busca uma Venda por Id.
+      description: Este método permite a consulta de uma Venda através do Id.
+      operationId: buscarPorIdUsingGET_2
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Id da Venda
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/Venda"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/wallet/autorizarCartao":
+    put:
+      tags:
+      - Wallet
+      summary: Autorização de cartão
+      description: Este método autoriza o cartão na wallet.
+      operationId: autorizarCartaoUsingPUT
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: request
+        description: request
+        required: true
+        schema:
+          "$ref": "#/definitions/WalletCartao"
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/DefaultResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+  "/api/wallet/listarWalletsPorCpf":
+    get:
+      tags:
+      - Wallet
+      summary: Listagem de Wallets por CPF
+      description: Este método lista as wallet's por cpf.
+      operationId: listarWalletsPorCpfUsingGET
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: cpf
+        in: query
+        description: CPF do portador
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/WalletResponse"
+        '400':
+          description: Requisição inválida.
+        '401':
+          description: Não autorizado.
+        '403':
+          description: Não permitido.
+        '404':
+          description: Recurso não encontrado.
+        '500':
+          description: Erro interno do sistema
+      security:
+      - access_token:
+        - global
+      - Authorization:
+        - global
+securityDefinitions:
+  access_token:
+    type: apiKey
+    name: access_token
+    in: header
+  Authorization:
+    type: apiKey
+    name: Authorization
+    in: header
+definitions:
+  CampoAuxiliarResponse:
+    type: object
+    properties:
+      descricao:
+        type: string
+      idCampoAuxiliar:
+        type: integer
+        format: int64
+      valor:
+        type: string
+    description: Campos auxiliares para retorno
+  Cadastro RedeCredenciada:
+    type: object
+    properties:
+      acordoFormaPagamento:
+        type: array
+        items:
+          "$ref": "#/definitions/Request Acordo Forma Pagamento"
+      bairro:
+        type: string
+      bancoAgencia:
+        type: string
+      bancoAgenciaDigito:
+        type: string
+      bancoCodigo:
+        type: string
+      bancoConta:
+        type: string
+      bancoContaDigito:
+        type: string
+      bancoCpfCnpj:
+        type: string
+      bancoNomeTitular:
+        type: string
+      bancoTipoConta:
+        type: string
+      bancoTipoPessoa:
+        type: string
+      cadastroDiaFechamento:
+        "$ref": "#/definitions/Cadastro do Dia Fechamento"
+      cep:
+        type: string
+      cidade:
+        type: string
+      cnpj:
+        type: string
+      codigoExterno:
+        type: string
+      complemento:
+        type: string
+      descricaoExibivelCliente:
+        type: string
+      email:
+        type: string
+      estado:
+        type: string
+      fone1:
+        type: string
+      fone2:
+        type: string
+      idFilial:
+        type: integer
+        format: int64
+      idPromotor:
+        type: integer
+        format: int64
+      idSegmento:
+        type: integer
+        format: int64
+      idTipoContrato:
+        type: integer
+        format: int64
+      inscricaoEstadual:
+        type: string
+      isPessoaFisica:
+        type: boolean
+      logradouro:
+        type: string
+      nomeFantasia:
+        type: string
+      numero:
+        type: string
+      observacao:
+        type: string
+      observacaoInterna:
+        type: string
+      razaoSocial:
+        type: string
+      regimeTributario:
+        type: string
+      sigla:
+        type: string
+      site:
+        type: string
+    description: Corpo da Requisição de cadastro de uma Rede Credenciada
+  EnderecoComercialPortadorRequest:
+    type: object
+    required:
+    - bairro
+    - cep
+    - cidade
+    - estado
+    - logradouro
+    - numero
+    properties:
+      bairro:
+        type: string
+        description: Campo para preenchimento do bairro do portador. Este campo possui
+          uma limitação de 80 caracteres.
+      cep:
+        type: string
+        description: Campo para preenchimento do cep do portador.
+      cidade:
+        type: string
+        description: Campo para preenchimento da cidade do portador. Este campo possui
+          uma limitação de 120 caracteres.
+      cnpj:
+        type: string
+        description: Campo para preenchimento do CNPJ da empresa que o portador trabalha.
+      complemento:
+        type: string
+        description: Campo para preenchimento do complemento do endereço comercial
+          do portador. Este campo possui uma limitação de 60 caracteres.
+      departamento:
+        type: string
+        description: Campo para preenchimento do departamento da empresa. Este campo
+          possui uma limitação de 100 caracteres.
+      empresa:
+        type: string
+        description: Campo para preenchimento com o nome da empresa que o portador
+          trabalha. Este campo possui uma limitação de 100 caracteres.
+      estado:
+        type: string
+        description: 'Campo para preenchimento do estado do endereço comercial do
+          portador. Campo deve ser informado com 2 caracteres. Ex: ''SP''.'
+      logradouro:
+        type: string
+        description: Logradouro do endereço comercial do portador. Este campo possui
+          uma limitação de 80 caracteres.
+      numero:
+        type: string
+        description: Campo para preenchimento do numero do endereço comercial do portador.
+    description: Parâmetros de requisição para cadastro de Portador
+  WalletResponse:
+    type: object
+    properties:
+      cnpjWallet:
+        type: string
+      contaWallet:
+        type: string
+      dataSolicitacaoWallet:
+        type: string
+        format: date-time
+      descricaoTipoContrato:
+        type: string
+      descricaoWallet:
+        type: string
+      diasExpiracaoToken:
+        type: integer
+        format: int32
+      idCartao:
+        type: integer
+        format: int64
+      idWallet:
+        type: integer
+        format: int64
+      idWalletCartao:
+        type: integer
+        format: int64
+      numeroCartaoMascarado:
+        type: string
+      permitirCartaoVariasWallets:
+        type: string
+      razaoSocialWallet:
+        type: string
+      statusWallet:
+        type: string
+      statusWalletCartao:
+        type: string
+      validarCpfPortador:
+        type: string
+  AutenticacaoRequest:
+    type: object
+    properties:
+      login:
+        type: string
+        description: Login para realização da geração do token.
+      password:
+        type: string
+        description: Password para realização da geração do token.
+    description: Parâmetros de requisição para gerar um token
+  ValidcaoLancamentoAjusteRequest:
+    type: object
+    required:
+    - idLancamentoAjuste
+    properties:
+      idLancamentoAjuste:
+        type: integer
+        format: int64
+        description: Código do Lançamento de ajuste a ser validado
+      validacaoAjuste:
+        type: string
+        description: Informa o status do ajuste.
+    description: Parâmetros de requisição para a validação de um lançamento de Ajuste
+  CadastroPortadorRequest:
+    type: object
+    required:
+    - cpf
+    - dataNascimento
+    - enderecoResidencial
+    - idConvenio
+    - matricula
+    - nome
+    - nomeCartao
+    - valorLimite
+    properties:
+      camposAuxiliares:
+        type: array
+        description: Campo para preenchimento dos campos auxiliares do portador.
+        items:
+          "$ref": "#/definitions/CampoAuxiliarRequest"
+      cpf:
+        type: string
+        description: Cpf do portador
+      dataAdmissao:
+        type: string
+        format: date
+        description: Campo para preenchimento com a data de admissão (yyyy-MM-dd)
+          do portador.
+      dataEmissaoRg:
+        type: string
+        format: date
+        description: Campo de preenchimento com a data de emissão (yyyy-MM-dd) do
+          RG.
+      dataNascimento:
+        type: string
+        format: date
+        description: Data de nascimento (yyyy-MM-dd) do portador.
+      email:
+        type: string
+        description: Campo para preenchimento do email do portador. Este campo possui
+          uma limitação de 60 caracteres.
+      enderecoComercial:
+        description: Campo para preenchimento do endereço comercial do portador.
+        "$ref": "#/definitions/EnderecoComercialPortadorRequest"
+      enderecoResidencial:
+        description: Campo para preenchimento do endereço residencial do portador.
+        "$ref": "#/definitions/EnderecoResidencialPortadorRequest"
+      estadoCivil:
+        type: integer
+        format: int32
+        description: 'Campo para preenchimento do estado civil do portador. Campo
+          aceita apenas números, sendo (1: Solteiro, 2: Casado, 3: Viúvo, 4: Divorciado,
+          5: Outros).'
+      idConvenio:
+        type: integer
+        format: int64
+        description: Campo Identificação do Convenio (idConvenio)
+      matricula:
+        type: string
+        description: Matricula do portador.
+      naturalidade:
+        type: string
+        description: Campo para preenchimento com a naturalidade (cidade de nascimento)
+          do portador. Este campo possui uma limitação de 40 caracteres.
+      naturalidadeUF:
+        type: string
+        description: 'Campo para preenchimento do estado de nascimento do portador.
+          Ex: SP'
+      nome:
+        type: string
+        description: Nome do portador. Este campo possui uma limitação de 80 caracteres.
+      nomeCartao:
+        type: string
+        description: Nome do Portador no cartão. Este campo possui uma limitação de
+          50 caracteres.
+      nomeMae:
+        type: string
+        description: Campo para preenchimento do nome da mãe do portador. Este campo
+          possui uma limitação de 40 caracteres.
+      nomePai:
+        type: string
+        description: Campo para preenchimento do nome do pai do portador. Este campo
+          possui uma limitação de 40 caracteres.
+      orgaoEmissor:
+        type: string
+        description: Campo de preenchimento do orgão emissor do RG.
+      rg:
+        type: string
+        description: Campo de identificação do RG do portador.
+      salario:
+        type: number
+        format: double
+        description: Campo para preenchimento com o salário do portador.
+      sexo:
+        type: string
+        description: Campo de preenchimento com o sexo ('M' ou 'F') do portador.
+      statusCliente:
+        type: string
+        description: Status do cliente, deverá ser informado 'A' para Ativo ou 'B'
+          para Bloqueado.
+      telefones:
+        type: array
+        description: Campo para preenchimento dos telefones do portador.
+        items:
+          "$ref": "#/definitions/TelefonePortadorRequest"
+      valorLimite:
+        type: number
+        format: double
+        description: Campo para preenchimento do limite do portador. Deve ser informado
+          um valor superior a 1 (um).
+    description: Parâmetros de requisição para cadastro de Portador
+  LancamentoAjusteResponse:
+    type: object
+    properties:
+      codigo:
+        type: integer
+        format: int64
+        description: Código do Lançamento Ajuste
+      dataCadastro:
+        type: string
+        format: date
+        description: 'Data de cadastro do Lançamento (YYYY-MM-DD). Ex: 2017-05-11'
+      dataFaturamento:
+        type: string
+        format: date
+        description: 'Data do Faturamento  (YYYY-MM-DD). Ex: 2017-05-11'
+      descricaoLancamentoAjuste:
+        type: string
+        description: Descrição do Lançamento Ajuste
+      descricaoResposta:
+        type: string
+        description: Descrição da resposta em caso de erro.
+      idPortador:
+        type: integer
+        format: int64
+        description: Identificação do Portador.
+      nomePortador:
+        type: string
+        description: Nome do Portador.
+      statusAjuste:
+        type: string
+        description: Satus Ajuste
+      tipoLancamentoAjuste:
+        type: integer
+        format: int64
+        description: Tipo do Lançamento Ajuste
+      valor:
+        type: number
+        format: double
+        description: Valor do Lançamento.
+  Promotor:
+    type: object
+    properties:
+      cnpj:
+        type: string
+      cpf:
+        type: string
+      id:
+        type: integer
+        format: int64
+      nome:
+        type: string
+      porcentagemComissao:
+        type: number
+        format: double
+  Reset de Senha Request:
+    type: object
+    properties:
+      cpf:
+        type: string
+      dataNascimento:
+        type: string
+        format: date
+        example: '1992-12-11'
+      retornaMensagemDataNascimento:
+        type: string
+    description: Corpo da Requisição para reset de senha de usuário
+  Cartao:
+    type: object
+    properties:
+      dataGeracao:
+        type: string
+        format: date-time
+        description: Apresenta a data em que o cartão foi gerado.
+      dataImpressao:
+        type: string
+        format: date-time
+        description: Apresenta a data em que o cartão fora impresso, caso impressão
+          em loja, ou a data em que ele fora incluído no arquivo para impressão via
+          gráfica.
+      dataProximaRecarga:
+        type: string
+        format: date
+        description: Data da Próxima Recarga
+      dataStatusCartao:
+        type: string
+        format: date-time
+        description: Apresenta a data em que o idStatusCartao atual do cartão fora
+          aplicado, quando houver.
+      dataValidade:
+        type: string
+        format: date-time
+        description: Apresenta a data de validade do cartão em formato yyyy-MM, quando
+          houver.
+      flagProvisorio:
+        type: integer
+        format: int32
+        description: Quando ativa, indica que o cartão é provisório. Ou seja, é um
+          cartão para uso temporário quando se deseja permitir que o cliente transacione
+          sem que ele tenha recebido um cartão definitivo.
+      id:
+        type: integer
+        format: int64
+        description: Código de Identificação do Cartão (id).
+      idConta:
+        type: integer
+        format: int64
+        description: Código de Identificação da Conta a qual o cartão pertence (id).
+      idConvenio:
+        type: integer
+        format: int64
+        description: Código de Identificação da Convênio.
+      isCartaoImpresso:
+        type: string
+        description: 'Apresenta o status de impressão do cartão, sendo: (''S'': Sim,
+          ''N'': Não).'
+      nomeImpresso:
+        type: string
+        description: Apresenta o nome impresso no cartão.
+      numeroCartao:
+        type: string
+        description: Apresenta o número truncado do cartão.
+      numeroCartaoCriptografado:
+        type: string
+        description: Apresenta o número do cartão criptografado.
+      saldoAnterior:
+        type: number
+        format: double
+        description: Saldo da Última Recarga.
+      saldoDisponivel:
+        type: number
+        format: double
+        description: Saldo Disponível.
+      saldoUtilizado:
+        type: number
+        format: double
+        description: Saldo Utilizado.
+      statusCartao:
+        type: string
+        description: 'Apresenta o Status do Cartão, sendo: (''V'': Válido, ''I'':
+          Invalido, ''B'': Bloqueado, ''T'': Troca, ''M'': Manual, ''G'': Gerado).'
+      tipoContrato:
+        type: string
+        description: Descrição do Tipo de Contrato do Convênio.
+    description: Objeto Cartão
+  ExtratoClienteResponse:
+    type: object
+    properties:
+      dataFechamentoFatura:
+        type: string
+        format: date
+        description: Data de fechamento da fatura.
+      devedorTotal:
+        type: number
+        format: double
+        description: Devedor Total(Todo o devedor atual do cliente incluindo as parcelas
+          futuras).
+      limite:
+        type: number
+        format: double
+        description: Limite Praticado Disponível.
+      limiteParcelado:
+        type: number
+        format: double
+        description: Limite Praticado Parcelado do cliente.
+      saldoDisponivel:
+        type: number
+        format: double
+        description: Saldo Rotativo Disponível.
+      saldoParceladoDisp:
+        type: number
+        format: double
+        description: Saldo Parcelado Disponível.
+      valorFaturaFechada:
+        type: number
+        format: double
+        description: Valor da Fatura Fechada.
+  CargaCredito:
+    type: object
+    properties:
+      dataAgendamento:
+        type: string
+        format: date-time
+      dataCriacao:
+        type: string
+        format: date-time
+      dataProcessamento:
+        type: string
+        format: date-time
+      faturado:
+        type: boolean
+      id:
+        type: integer
+        format: int64
+      idLoja:
+        type: integer
+        format: int64
+      idUsuarioCriacao:
+        type: integer
+        format: int64
+      quantidadeRegistrosValidos:
+        type: integer
+        format: int64
+      quantidadeTotalRegistros:
+        type: integer
+        format: int64
+      status:
+        type: string
+        enum:
+        - carregando
+        - validando
+        - aguardando
+        - processando
+        - processado
+        - cancelado
+        - erro
+        - aguardando-verificacao
+      totalAgendado:
+        type: number
+        format: double
+      valorRegistrosValidos:
+        type: number
+        format: double
+      valorTotalRegistros:
+        type: number
+        format: double
+  Usuario Request:
+    type: object
+    properties:
+      cpf:
+        type: string
+      dataNascimento:
+        type: string
+        format: date
+        example: '1992-12-11'
+      email:
+        type: string
+      nome:
+        type: string
+      panCartao:
+        type: string
+      senha:
+        type: string
+      telefone:
+        type: string
+    description: Corpo da Requisição de um Usuário
+  TokenNotification:
+    type: object
+    properties:
+      cpf:
+        type: string
+      deviceToken:
+        type: string
+    description: Parâmetros de requisição para cadastrar o Device Token
+  AlteracaoSenhaCartaoURARequest:
+    type: object
+    required:
+    - confirmacaoSenha
+    - idCartao
+    - novaSenha
+    properties:
+      confirmacaoSenha:
+        type: string
+        description: Confirmação da nova senha (criptografada).
+      idCartao:
+        type: integer
+        format: int64
+        description: Código de Identificação do Cartão (id).
+      novaSenha:
+        type: string
+        description: Nova senha do cartão (criptografada).
+    description: Parâmetros de requisição para alteração de senha de Cartão
+  TelefonePortadorRequest:
+    type: object
+    required:
+    - area
+    - numeroTelefone
+    - tipo
+    properties:
+      area:
+        type: string
+        description: Campo para preenchimento com a aréa do telefone do portador.
+          Campo aceita até 2 caracteres e deve ser informado sem máscara.
+      numeroTelefone:
+        type: string
+        description: Campo para preenchimento com o número do telefone do portador.
+          Campo aceita até 9 números e deve ser informado sem máscara.
+      ramal:
+        type: string
+        description: Campo para preenchimento com o ramal do telefone do portador.
+      tipo:
+        type: string
+        description: 'Campo para preenchimento com o tipo do telefone do portador.
+          Campo aceita apenas 1 caractere, sendo: (''R'': Residencial, ''C'': Comercial,
+          ''X'': Celular).'
+    description: Campos de telefone para cadastro de Portador
+  FaturasPortador:
+    type: object
+    properties:
+      ativa:
+        type: string
+        description: Status da fatura ativa (S - SIM; N - NÃO).
+      cpfPortador:
+        type: string
+        description: CPF do portador.
+      dataProcessamento:
+        type: string
+        format: date
+        description: Data de processamento da fatura.
+      dataVencimento:
+        type: string
+        format: date
+        description: Data de Vencimento da Fatura.
+      idConvenio:
+        type: integer
+        format: int64
+        description: Código de Identificação da Convênio.
+      idFatura:
+        type: integer
+        format: int64
+        description: Código de Identificação da fatura.
+      idPortador:
+        type: integer
+        format: int64
+        description: Código de Identificação do portador.
+      idProcessamento:
+        type: integer
+        format: int64
+        description: Código de Identificação do processamento da fatura.
+      totalPrincipal:
+        type: number
+        format: double
+        description: Valor principal da fatura.
+      totalTaxas:
+        type: number
+        format: double
+        description: Valor total de taxas da fatura.
+      valorTotal:
+        type: number
+        format: double
+        description: Valor da fatura.
+    description: Dados da fatura por portador
+  Cadastro do Dia Fechamento:
+    type: object
+    properties:
+      diaFechamento:
+        type: integer
+        format: int32
+      diasParaRepasse:
+        type: integer
+        format: int32
+      fechamentoSemanal:
+        type: boolean
+      fechamentoUltimoDiaMes:
+        type: boolean
+    description: Corpo da Requisição de cadastro de Dia Fechamento
+  WalletCartao:
+    type: object
+    properties:
+      idWalletCartao:
+        type: integer
+        format: int64
+      status:
+        type: string
+    description: Parâmetros de requisição da atualização de status da wallet cartão
+  AlteracaoSenhaCartaoRequest:
+    type: object
+    required:
+    - idCartao
+    - senhaNova
+    properties:
+      idCartao:
+        type: integer
+        format: int64
+        description: Código de Identificação do Cartão (id).
+      senhaAtual:
+        type: string
+        description: Senha atual do cartão (criptografada).
+      senhaNova:
+        type: string
+        description: Nova senha do cartão (criptografada).
+    description: Parâmetros de requisição para alteração de senha de Cartão
+  EnderecoResidencialPortadorRequest:
+    type: object
+    required:
+    - bairro
+    - cep
+    - cidade
+    - estado
+    - logradouro
+    - numero
+    properties:
+      bairro:
+        type: string
+        description: Campo para preenchimento do bairro do portador. Este campo possui
+          uma limitação de 80 caracteres.
+      cep:
+        type: string
+        description: Campo para preenchimento do cep do portador.
+      cidade:
+        type: string
+        description: Campo para preenchimento da cidade do portador. Este campo possui
+          uma limitação de 100 caracteres.
+      complemento:
+        type: string
+        description: Campo para preenchimento do complemento do endereço residencial
+          do portador. Este campo possui uma limitação de 100 caracteres.
+      estado:
+        type: string
+        description: 'Campo para preenchimento do estado do endereço residencial do
+          portador. Campo deve ser informado com 2 caracteres. Ex: ''SP''.'
+      logradouro:
+        type: string
+        description: Logradouro do endereço residencial. Este campo possui uma limitação
+          de 80 caracteres.
+      numero:
+        type: string
+        description: Campo para preenchimento do numero do endereço residencial do
+          portador.
+    description: Parâmetros de requisição para cadastro de Portador
+  ResetSenhaUsuarioResponse:
+    type: object
+    properties:
+      email:
+        type: string
+  CancelarTransacaoRequest:
+    type: object
+    required:
+    - cnpjEstabelecimento
+    - dataHoraTransacao
+    - idCartao
+    - nsuOrigem
+    - tipoTransacao
+    - valor
+    properties:
+      cnpjEstabelecimento:
+        type: string
+        description: CNPJ do Estabelecimento onde a Transação está sendo realizada.
+      dadosTransacaoOriginal:
+        description: Campo para preenchimento com os dados da transação original.
+          Esse campo só deverá ser preenchido para Cancelamento de transação.
+        "$ref": "#/definitions/DadosTransacaoOriginalRequest"
+      dataHoraTransacao:
+        type: string
+        format: date-time
+        description: 'Data Local da realização da Transação Financeira (YYYY-MM-DDTHH:MM:SS).
+          Ex: 2017-05-11T20:10:21)'
+      idCartao:
+        type: integer
+        format: int64
+        description: Identificação do Cartão a ter a Transação Financeira realizada.
+      nsuOrigem:
+        type: string
+        description: NSU Origem da Transação Financeira
+      tipoTransacao:
+        type: integer
+        format: int32
+        description: 'Tipo de Transação Financeira a ser realizada. Opções aceitas:
+          8: Cancelamento de Cash-Out,9: Cancelamento de Saque,10: Cancelamento de
+          Cash-In.'
+      valor:
+        type: number
+        format: double
+        description: Valor da Transação Financeira
+    description: Parâmetros de requisição para uma Transação Financeira
+  Rede Credenciada:
+    type: object
+    properties:
+      cnpj:
+        type: string
+      dataCadastro:
+        type: string
+        format: date-time
+        description: Data de Cadastro da Rede Credenciada.
+      descricaoExibivelCliente:
+        type: string
+      email:
+        type: string
+      endereco:
+        "$ref": "#/definitions/Endereco"
+      fone1:
+        type: string
+      fone2:
+        type: string
+      gruposCnae:
+        type: array
+        items:
+          "$ref": "#/definitions/Grupo CNAE Simples"
+      id:
+        type: integer
+        format: int64
+      idRedeCredenciada:
+        type: integer
+        format: int64
+        description: Identificação da Rede Credenciada (id).
+      inscricaoEstadual:
+        type: string
+      nomeFantasia:
+        type: string
+      promotor:
+        "$ref": "#/definitions/Promotor"
+      razaoSocial:
+        type: string
+      status:
+        type: string
+        description: Status da Rede Credenciada.
+  EnderecoComplementarConvenioRequest:
+    type: object
+    required:
+    - bairro
+    - cep
+    - cidade
+    - codigoConvenio
+    - estado
+    - logradouro
+    - numero
+    properties:
+      bairro:
+        type: string
+        description: Campo para preenchimento do bairro do portador. Este campo possui
+          uma limitação de 80 caracteres.
+      cep:
+        type: string
+        description: Campo para preenchimento do cep do portador.
+      cidade:
+        type: string
+        description: Campo para preenchimento da cidade do portador. Este campo possui
+          uma limitação de 100 caracteres.
+      codigoConvenio:
+        type: integer
+        format: int64
+        description: Código de Identificação do Convenio(id).
+      codigoExterno:
+        type: string
+        description: Código Externo do endereço.
+      complemento:
+        type: string
+        description: Campo para preenchimento do complemento do endereço residencial
+          do portador. Este campo possui uma limitação de 100 caracteres.
+      estado:
+        type: string
+        description: 'Campo para preenchimento do estado do endereço residencial do
+          portador. Campo deve ser informado com 2 caracteres. Ex: ''SP''.'
+      interlocutor:
+        type: string
+        description: Interlocutor do endereço.
+      logradouro:
+        type: string
+        description: Logradouro do endereço residencial. Este campo possui uma limitação
+          de 80 caracteres.
+      nome:
+        type: string
+        description: Código Externo do endereço.
+      numero:
+        type: string
+        description: Campo para preenchimento do numero do endereço residencial do
+          portador.
+    description: Parâmetros de requisição cadastro de endereço complementar de convenio
+  AlteracaoPortadorMinimoRequest:
+    type: object
+    required:
+    - cpf
+    - enderecoResidencial
+    - idConvenio
+    - nome
+    - telefone
+    properties:
+      cpf:
+        type: string
+        description: Cpf do portador
+      email:
+        type: string
+        description: Campo para preenchimento do email do portador. Este campo possui
+          uma limitação de 50 caracteres.
+      enderecoResidencial:
+        description: Campo para preenchimento do endereço residencial do portador.
+        "$ref": "#/definitions/EnderecoResidencialPortadorRequest"
+      idConvenio:
+        type: integer
+        format: int64
+        description: Campo Identificação do Convenio (idConvenio)
+      nome:
+        type: string
+        description: Nome do portador. Este campo possui uma limitação de 80 caracteres.
+      nomeCartao:
+        type: string
+        description: Nome do portador no cartão. Este campo possui uma limitação de
+          19 caracteres.
+      rendaFaturamentoMensal:
+        type: integer
+        format: int64
+        description: Campo Renda/Faturamento Mensal
+      setor:
+        type: string
+        description: Campo para preenchimento do setor do portador. Este campo possui
+          uma limitação de 50 caracteres.
+      telefone:
+        type: string
+        description: Campo para preenchimento com o número do telefone do portador.
+          Campo aceita até 12 números e deve ser informado sem máscara.
+    description: Parâmetros de requisição para alteração de Portador
+  HistoricoResponse:
+    type: object
+    properties:
+      eventos:
+        type: array
+        description: Lista dos eventos recentes do portador
+        items:
+          "$ref": "#/definitions/Evento"
+  Grupo CNAE Simples:
+    type: object
+    properties:
+      descricao:
+        type: string
+      id:
+        type: integer
+        format: int64
+  FaturaConvenio:
+    type: object
+    properties:
+      cnpjConvenio:
+        type: string
+      dataCorte:
+        type: string
+        format: date-time
+      dataVencimento:
+        type: string
+        format: date-time
+      id:
+        type: integer
+        format: int64
+      idConvenio:
+        type: integer
+        format: int64
+      pago:
+        type: boolean
+      tipo:
+        type: string
+        enum:
+        - Crédito
+        - Venda
+      valorTotal:
+        type: number
+        format: double
+  SetorRequest:
+    type: object
+    required:
+    - descricao
+    - idConvenio
+    - status
+    properties:
+      codigoExterno:
+        type: string
+        description: Código externo do Setor. Pode ser usado como código de centro
+          de custo em sistemas externos.
+      descricao:
+        type: string
+        description: Descrição do setor.
+      idConvenio:
+        type: integer
+        format: int64
+        description: Código de Identificação do Convênio (id).
+      interlocutor:
+        type: string
+        description: Nome do interlocutor.
+      status:
+        type: string
+        description: Status do setor. A para ativo, C para Cancelado
+    description: Parâmetros de requisição cadastro de setor
+  Tipo Contrato Simples:
+    type: object
+    properties:
+      descricao:
+        type: string
+      id:
+        type: integer
+        format: int64
+  GrupoCnaeResponse:
+    type: object
+    properties:
+      cnaes:
+        type: array
+        items:
+          type: string
+      dataCadastro:
+        type: string
+        format: date-time
+      descricao:
+        type: string
+      id:
+        type: integer
+        format: int64
+      status:
+        type: string
+  LancamentoRepasse:
+    type: object
+    properties:
+      dataFaturamento:
+        type: string
+        format: date-time
+      dataProcessamento:
+        type: string
+        format: date-time
+      faturado:
+        type: boolean
+      id:
+        type: integer
+        format: int64
+      observacao:
+        type: string
+      parcelaAtual:
+        type: integer
+        format: int32
+      tipo:
+        type: string
+      totalParcelas:
+        type: integer
+        format: int32
+      valor:
+        type: number
+        format: double
+      valorTaxa:
+        type: number
+        format: double
+      venda:
+        "$ref": "#/definitions/Venda"
+  DesbloqueioCartao:
+    type: object
+    properties:
+      camposAuxiliares:
+        type: array
+        description: Código de Identificação da Conta a qual o cartão pertence (id).
+        items:
+          "$ref": "#/definitions/CampoAuxiliarResponse"
+      cpf:
+        type: string
+        description: CPF da conta
+      dataDesbloqueio:
+        type: string
+        format: date-time
+        description: Data de desbloqueio do cartão
+      idConta:
+        type: integer
+        format: int64
+        description: Código de Identificação da Conta a qual o cartão pertence (id).
+      idConvenio:
+        type: integer
+        format: int64
+        description: Código de Identificação da Convênio.
+      idDesbloqueio:
+        type: integer
+        format: int64
+        description: Id do desbloqueio do cartão
+      statusConta:
+        type: string
+        description: Status da Conta.
+    description: Dados de desbloqueio do cartão
+  PagamentoFaturaConvenio:
+    type: object
+    properties:
+      data:
+        type: string
+        format: date-time
+      id:
+        type: integer
+        format: int64
+      status:
+        type: string
+      valorPago:
+        type: number
+        format: double
+  FaturaRepasse:
+    type: object
+    properties:
+      cnpjRede:
+        type: string
+      dataCorte:
+        type: string
+        format: date-time
+      dataVencimento:
+        type: string
+        format: date-time
+      id:
+        type: integer
+        format: int64
+      idRede:
+        type: integer
+        format: int64
+      pago:
+        type: boolean
+      valorTotal:
+        type: number
+        format: double
+  PortadorMinimoRequest:
+    type: object
+    required:
+    - cpf
+    - dataNascimento
+    - enderecoResidencial
+    - idConvenio
+    - mae
+    - nome
+    - telefone
+    properties:
+      cpf:
+        type: string
+        description: Cpf do portador
+      dataNascimento:
+        type: string
+        format: date
+        description: Data de nascimento (yyyy-MM-dd) do portador.
+      email:
+        type: string
+        description: Campo para preenchimento do email do portador. Este campo possui
+          uma limitação de 50 caracteres.
+      enderecoResidencial:
+        description: Campo para preenchimento do endereço residencial do portador.
+        "$ref": "#/definitions/EnderecoResidencialPortadorRequest"
+      idConvenio:
+        type: integer
+        format: int64
+        description: Campo Identificação do Convenio (idConvenio)
+      mae:
+        type: string
+        description: Nome da mãe do portador. Este campo possui uma limitação de 40
+          caracteres.
+      matricula:
+        type: string
+        description: Matricula do portador.
+      nome:
+        type: string
+        description: Nome do portador. Este campo possui uma limitação de 80 caracteres.
+      nomeCartao:
+        type: string
+        description: Nome do portador no cartão. Este campo possui uma limitação de
+          19 caracteres.
+      rendaFaturamentoMensal:
+        type: integer
+        format: int64
+        description: Campo Renda/Faturamento Mensal
+      setor:
+        type: string
+        description: Nome do Setor
+      telefone:
+        type: string
+        description: Campo para preenchimento com o número do telefone do portador.
+          Campo aceita até 12 números e deve ser informado sem máscara.
+    description: Parâmetros de requisição para cadastro de Portador
+  TipoTransacaoResponse:
+    type: object
+    properties:
+      descricaoTransacao:
+        type: string
+      tipoTransacao:
+        type: integer
+        format: int32
+  AlteracaoLimiteRequest:
+    type: object
+    required:
+    - idPortador
+    - valorLimite
+    properties:
+      ciclo:
+        type: string
+        description: Status do cliente, deverá ser informado 'A' para Ativo ou 'B'
+          para Bloqueado.
+      idPortador:
+        type: integer
+        format: int64
+        description: Campo Identificação do Portador (idPortador)
+      valorLimite:
+        type: integer
+        format: int64
+        description: Valor do limite
+    description: Parâmetros de requisição para alteração de limite
+  ExtratoMovimentacaoResponse:
+    type: object
+    properties:
+      CNPJRedeCredenciada:
+        type: string
+        description: CNPJ da Rede Credenciada. Preenchido no extrato apenas para lançamentos
+          de venda.
+      data:
+        type: string
+        format: date-time
+        description: Data da Movimentação.
+      descricao:
+        type: string
+        description: Descrição de Movimentação.
+      idRedeCredenciada:
+        type: number
+        format: double
+        description: ID da Rede Credenciada. Preenchido no extrato apenas para lançamentos
+          de venda.
+      tipo:
+        type: string
+        description: Tipo de Movimentação.
+        enum:
+        - ajuste
+        - venda
+        - pagamento
+      valor:
+        type: number
+        format: double
+        description: Valor da Movimentação.
+  TransacaoRequest:
+    type: object
+    required:
+    - chave
+    - cnpjEstabelecimento
+    - dataHoraTransacao
+    - idCartao
+    - nsuOrigem
+    - numeroParcelas
+    - tipoParcela
+    - tipoTransacao
+    - valor
+    properties:
+      chave:
+        type: string
+        description: Chave de autenticação da Transação Financeira.
+      cnpjEstabelecimento:
+        type: string
+        description: CNPJ do Estabelecimento onde a Transação está sendo realizada.
+      codigoTerminal:
+        type: string
+        description: Código do Terminal a ser utilizado na Transação Financeira.
+      cvvToken:
+        type: string
+        description: CVV/Token do Cartão
+      dataHoraTransacao:
+        type: string
+        format: date-time
+        description: 'Data Local da realização da Transação Financeira (YYYY-MM-DDTHH:MM:SS).
+          Ex: 2017-05-11T20:10:21)'
+      idCartao:
+        type: integer
+        format: int64
+        description: Identificação do Cartão a ter a Transação Financeira realizada.
+      nsuOrigem:
+        type: string
+        description: NSU Origem da Transação Financeira
+      numeroParcelas:
+        type: integer
+        format: int32
+        description: Campo para preenchimento do número de parcelas de uma transação
+          financeira.
+      tipoParcela:
+        type: string
+        description: 'Campo que indica o tipo de parcelamento numa requisição financeira
+          de venda. Valores possíveis: R - Rotativo; P - Parcelada sem juros; J -
+          Parcelada com juros.'
+      tipoTransacao:
+        type: integer
+        format: int32
+        description: 'Tipo de Transação Financeira a ser realizada. Opções aceitas:
+          1: Compra com cartão (Cash Out), 2: Saque com cartão (Cash Out), 3: Pagamento
+          de conta com cartão (Cash Out), 4: Crédito cartão (Cash In), 5: Crédito
+          cartão via boleto de pagamento (Cash In), 6: Crédito cartão via débito em
+          conta (Cash In), 7: Crédito cartão via cartão de crédito (Cash In).'
+      validadeCartao:
+        type: string
+        format: date
+        description: Data de Vencimento do Cartão (MMAAAA).
+      valor:
+        type: number
+        format: double
+        description: Valor da Transação Financeira
+    description: Parâmetros de requisição para uma Transação Financeira
+  TipoLancamento:
+    type: object
+    properties:
+      descricao:
+        type: string
+      id:
+        type: integer
+        format: int64
+      tipo:
+        type: string
+  Request Acordo Forma Pagamento:
+    type: object
+    properties:
+      cobrarTaxaParcela:
+        type: boolean
+      diasRepasse:
+        type: integer
+        format: int32
+      idFormaPagamentoCartao:
+        type: integer
+        format: int64
+      taxa:
+        type: number
+        format: double
+      taxaParcela:
+        type: number
+        format: double
+    description: Corpo da Requisição de uma requisição de Cadastro de Acordo Forma
+      Pagamento
+  SenhaCartaoRequest:
+    type: object
+    required:
+    - senha
+    properties:
+      senha:
+        type: string
+        description: Nova senha do cartão (criptografada).
+    description: Parâmetros de requisição para cadastro de senha de Cartão
+  ValidacaoLancamentoAjusteResponse:
+    type: object
+    properties:
+      msg:
+        type: string
+        description: Mensagem
+  Usuario Response:
+    type: object
+    properties:
+      cpf:
+        type: string
+      dataNascimento:
+        type: string
+        format: date
+        example: '1992-12-11'
+      email:
+        type: string
+      id:
+        type: integer
+        format: int64
+      nome:
+        type: string
+      telefone:
+        type: string
+  ConsultarClienteResponse:
+    type: object
+    properties:
+      cpf:
+        type: string
+        description: Cpf do cliente titular (cpf).
+      dataNascimento:
+        type: string
+        format: date
+        description: Data Nascimento.
+      dataUltimaCompra:
+        type: string
+        format: date
+        description: Data da última compra do cliente.
+      dataUltimaRecarga:
+        type: string
+        format: date
+        description: Data da última recarga do cliente.
+      email:
+        type: string
+        description: E-mail do cliente titular
+      endereco:
+        description: Endereço
+        "$ref": "#/definitions/Endereco"
+      idCartao:
+        type: integer
+        format: int64
+        description: Código do Cartão do Cliente
+      idConta:
+        type: integer
+        format: int64
+        description: Código de identificação do portador
+      idConvenio:
+        type: integer
+        format: int64
+      limiteParcelado:
+        type: number
+        format: double
+      limitePrincipal:
+        type: number
+        format: double
+      nome:
+        type: string
+        description: Nome do cliente titular (nome).
+      nomeMae:
+        type: string
+        description: Nome da mãe
+      nomePai:
+        type: string
+        description: Nome do pai
+      numeroCartao:
+        type: string
+        description: Número do cartão
+      orgaoEmissor:
+        type: string
+        description: Orgão Emissor
+      rg:
+        type: string
+        description: RG
+      saldoDisponivel:
+        type: number
+        format: double
+      saldoDisponivelParcelado:
+        type: number
+        format: double
+      sexo:
+        type: string
+        description: Sexo
+      statusCartao:
+        type: string
+        description: Status do cartao, B - Bloqueado, T - Bloqueado temporariamente(pode
+          desbloquear), A - Ativo
+        enum:
+        - B
+        - T
+        - A
+      statusCliente:
+        type: string
+        description: Status do cliente, sendo A - Ativo, B - Bloqueado, C - Cancelado
+      telefonePortador:
+        type: string
+        description: Telefone do portador
+  Alteração Usuario Request:
+    type: object
+    properties:
+      dataNascimento:
+        type: string
+        format: date
+        example: '1992-12-11'
+      email:
+        type: string
+      nome:
+        type: string
+      telefone:
+        type: string
+    description: Corpo da Requisição de alteração de Usuário
+  Usuario Autenticação Request:
+    type: object
+    properties:
+      cpf:
+        type: string
+      senha:
+        type: string
+    description: Corpo da Autenticação de um Usuário
+  ExtratoMovClienteResponse:
+    type: object
+    properties:
+      cnpjEstabelecimento:
+        type: string
+        description: CNPJ do Estabelecimento.
+      cpfCliente:
+        type: string
+        description: CPF do cliente.
+      data:
+        type: string
+        format: date-time
+        description: Data da Movimentação.
+      idCartao:
+        type: integer
+        format: int64
+        description: ID do Cartão.
+      tipoTransacao:
+        description: 'Tipo de Transação Financeira realizada. Opções aceitas: 1: Compra
+          com cartão (Cash Out), 2: Saque com cartão (Cash Out), 3: Pagamento de conta
+          com cartão (Cash Out), 4: Crédito cartão (Cash In), 5: Crédito cartão via
+          boleto de pagamento (Cash In), 6: Crédito cartão via débito em conta (Cash
+          In), 7: Crédito cartão via cartão de crédito (Cash In),8: Cancelamento de
+          Cash-Out,9: Cancelamento de Saque,10: Cancelamento de Cash-In.'
+        "$ref": "#/definitions/TipoTransacaoResponse"
+      valor:
+        type: number
+        format: double
+        description: Valor da Movimentação.
+  Venda:
+    type: object
+    properties:
+      cnpjEstabelecimento:
+        type: string
+      data:
+        type: string
+        format: date-time
+      dataConfirmacao:
+        type: string
+        format: date-time
+      id:
+        type: integer
+        format: int64
+      idCartao:
+        type: integer
+        format: int64
+      idConvenio:
+        type: integer
+        format: int64
+      meioCapturaTransacao:
+        type: string
+      nsuCadastro:
+        type: string
+      nsuRetorno:
+        type: string
+      numeroAutorizacao:
+        type: string
+      numeroCartao:
+        type: string
+      numeroParcelas:
+        type: integer
+        format: int32
+      numeroTerminal:
+        type: string
+      valor:
+        type: number
+        format: double
+  Evento:
+    type: object
+    properties:
+      cnpjLoja:
+        type: string
+        description: CNPJ da loja da transação
+      credito:
+        type: boolean
+        description: Para transações financeiras, quando false indica que a transação
+          é de débito
+      data:
+        type: string
+        description: Data de ocorrência do evento
+      descricao:
+        type: string
+        description: Descrição
+      documento:
+        type: string
+        description: Documento
+      loja:
+        type: string
+        description: Nome da loja da transação
+      nomePortador:
+        type: string
+        description: Nome do portador que realizou a transação
+      nsu:
+        type: string
+        description: NSU
+      numeroCartao:
+        type: string
+        description: Número do cartão da transação
+      tipo:
+        type: string
+        description: 'Tipo do evento sendo: V-Venda; C-Cancelamento de venda; P-Pagamento;
+          S-Saque; BT-Bloqueio de cartão temporário; BP-Bloqueio de cartão permanente;
+          D-Desbloqueio; T-Troca de cartão; U-Troca de ciclo; A-Ajuste '
+        enum:
+        - V
+        - C
+        - P
+        - S
+        - BP
+        - BT
+        - D
+        - T
+        - U
+      valor:
+        type: number
+        format: double
+        description: Valor, prara transações financeiras
+  Convênio:
+    type: object
+    properties:
+      bloquearClientes:
+        type: boolean
+      cnpj:
+        type: string
+      descricaoExibivelCliente:
+        type: string
+      email:
+        type: string
+      empresaPublica:
+        type: boolean
+      endereco:
+        "$ref": "#/definitions/Endereco"
+      fone1:
+        type: string
+      fone2:
+        type: string
+      gruposCnae:
+        type: array
+        items:
+          "$ref": "#/definitions/Grupo CNAE Simples"
+      id:
+        type: integer
+        format: int64
+      inscricaoEstadual:
+        type: string
+      nomeFantasia:
+        type: string
+      promotor:
+        "$ref": "#/definitions/Promotor"
+      razaoSocial:
+        type: string
+      tipoContrato:
+        "$ref": "#/definitions/Tipo Contrato Simples"
+  DadosTransacaoOriginalRequest:
+    type: object
+    required:
+    - dataHoraTransacao
+    - nsuTransacaoOriginal
+    - tipoTransacaoOriginal
+    properties:
+      dataHoraTransacao:
+        type: string
+        format: date-time
+        description: 'Data Local da realização da Transação Financeira (YYYY-MM-DDTHH:MM:SS).
+          Ex: 2017-05-11T20:10:21)'
+      nsuTransacaoOriginal:
+        type: string
+        description: NSU Origem da Transação Financeira
+      tipoTransacaoOriginal:
+        type: integer
+        format: int32
+        description: 'Este campo deverá ser preenchido com o tipo da transação original
+          que será cancelada. Opções aceitas: 1: Compra com cartão (Cash Out), 2:
+          Saque com cartão (Cash Out), 3: Pagamento de conta com cartão (Cash Out),
+          4: Crédito cartão (Cash In), 5: Crédito cartão via boleto de pagamento (Cash
+          In), 6: Crédito cartão via débito em conta (Cash In), 7: Crédito cartão
+          via cartão de crédito (Cash In).'
+    description: Parâmetros de requisição para uma Transação Financeira
+  LancamentoAjusteRequest:
+    type: object
+    required:
+    - dataFaturamento
+    - idPortador
+    - valor
+    properties:
+      codigoPontoDeVenda:
+        type: integer
+        format: int32
+        description: Código do Terminal a ser utilizado na Transação Financeira.
+      dataFaturamento:
+        type: string
+        format: date
+        description: 'Data do Faturamento (YYYY-MM-DD). Ex: 2017-05-11'
+      idPortador:
+        type: integer
+        format: int64
+        description: Identificação do Portador que terá um ajuste a ser realizado.
+      idTipoLancamento:
+        type: integer
+        format: int32
+        description: Tipo de Lançamento de Ajuste. Só serão aceitos os tipos de lançamento
+          onde a flag Lançamento Administrador esteja marcada. Verificar no retaguarda
+          do Cards.
+      observacao:
+        type: string
+        description: Observação do lançamento.
+      valor:
+        type: number
+        format: double
+        description: Valor do Lançamento
+    description: Parâmetros de requisição para um lançamento de Ajuste
+  DefaultResponse:
+    type: object
+    properties:
+      msg:
+        type: string
+        description: Mensageria do sistema.
+  TipoContrato:
+    type: object
+    properties:
+      clientePat:
+        type: boolean
+      descricao:
+        type: string
+      id:
+        type: integer
+        format: int64
+      modalidade:
+        type: string
+        enum:
+        - CREDITO
+        - LIMITE
+      status:
+        type: string
+  Contato:
+    type: object
+    properties:
+      area:
+        type: string
+      cpf:
+        type: string
+      dataNascimento:
+        type: string
+        format: date-time
+      id:
+        type: integer
+        format: int64
+      idLoja:
+        type: integer
+        format: int64
+      nome:
+        type: string
+      orgaoEmissor:
+        type: string
+      rg:
+        type: string
+      telefone:
+        type: string
+      tipo:
+        type: string
+  AjusteFaturaConvenio:
+    type: object
+    properties:
+      data:
+        type: string
+        format: date
+      id:
+        type: integer
+        format: int64
+      idUsuario:
+        type: integer
+        format: int64
+      observacao:
+        type: string
+      tipoLancamento:
+        "$ref": "#/definitions/TipoLancamento"
+      valor:
+        type: number
+        format: double
+  CampoAuxiliarRequest:
+    type: object
+    required:
+    - idCampoAuxiliar
+    - valor
+    properties:
+      idCampoAuxiliar:
+        type: integer
+        format: int64
+        description: Campo para preenchimento com a identificação (id) do campo auxiliar
+          na base do emissor
+      valor:
+        type: string
+        description: Campo para preenchimento do valor do campo auxilar.
+    description: Campos auxiliares para cadastro de Portador
+  Troca de Senha Request:
+    type: object
+    properties:
+      senhaAtual:
+        type: string
+      senhaNova:
+        type: string
+    description: Corpo da Requisição para troca de senha de usuário
+  Date:
+    type: object
+    properties:
+      date:
+        type: integer
+        format: int32
+      day:
+        type: integer
+        format: int32
+      hours:
+        type: integer
+        format: int32
+      minutes:
+        type: integer
+        format: int32
+      month:
+        type: integer
+        format: int32
+      seconds:
+        type: integer
+        format: int32
+      time:
+        type: integer
+        format: int64
+      timezoneOffset:
+        type: integer
+        format: int32
+      year:
+        type: integer
+        format: int32
+  Endereco:
+    type: object
+    properties:
+      bairro:
+        type: string
+      cep:
+        type: string
+      cidade:
+        type: string
+      complemento:
+        type: string
+      estado:
+        type: string
+      logradouro:
+        type: string
+      numero:
+        type: string
+  CadastroPortadorResponse:
+    type: object
+    properties:
+      cartaoMascarado:
+        type: string
+        description: Número mascarado do cartão.
+      dataCadastro:
+        type: string
+        format: date-time
+        description: Data de cadastro do portador
+      idCartao:
+        type: integer
+        format: int64
+        description: Código de Identificação do Cartão (id).
+      idPortador:
+        type: integer
+        format: int64
+        description: Identificação do Portador (id).
+      statusCartao:
+        type: string
+        description: Status do cartao, B - Bloqueado, T - Bloqueado temporariamente(pode
+          desbloquear), A - Ativo
+        enum:
+        - B
+        - T
+        - A
+      statusConta:
+        type: string
+        description: Status da Conta.
+  ResponseEntity:
+    type: object
+    properties:
+      body:
+        type: object
+      statusCode:
+        type: string
+        enum:
+        - '100'
+        - '101'
+        - '102'
+        - '103'
+        - '200'
+        - '201'
+        - '202'
+        - '203'
+        - '204'
+        - '205'
+        - '206'
+        - '207'
+        - '208'
+        - '226'
+        - '300'
+        - '301'
+        - '302'
+        - '302'
+        - '303'
+        - '304'
+        - '305'
+        - '307'
+        - '308'
+        - '400'
+        - '401'
+        - '402'
+        - '403'
+        - '404'
+        - '405'
+        - '406'
+        - '407'
+        - '408'
+        - '409'
+        - '410'
+        - '411'
+        - '412'
+        - '413'
+        - '413'
+        - '414'
+        - '414'
+        - '415'
+        - '416'
+        - '417'
+        - '418'
+        - '419'
+        - '420'
+        - '421'
+        - '422'
+        - '423'
+        - '424'
+        - '426'
+        - '428'
+        - '429'
+        - '431'
+        - '451'
+        - '500'
+        - '501'
+        - '502'
+        - '503'
+        - '504'
+        - '505'
+        - '506'
+        - '507'
+        - '508'
+        - '509'
+        - '510'
+        - '511'
+      statusCodeValue:
+        type: integer
+        format: int32
+  AutenticacaoResponse:
+    type: object
+    properties:
+      dataExpiracao:
+        type: string
+        description: Data e hora da expiração do token.
+      token:
+        type: string
+        description: Token que deve ser utilizado nos endpoints com JWT.
+    description: Parâmetros de requisição para gerar um token
+  CargaLoteRequest:
+    type: object
+    required:
+    - idConvenio
+    - observacao
+    - tipoChave
+    - tipoLancamento
+    properties:
+      dataAgendamento:
+        type: string
+        format: date
+        description: Campo de preenchimento com a data de agendamento (yyyy-MM-dd).
+      dataProcessamento:
+        type: string
+        format: date
+        description: Campo de preenchimento com a data de processamento (yyyy-MM-dd).
+      idConvenio:
+        type: integer
+        format: int64
+        description: Campo Identificação do Convenio (idConvenio)
+      itens:
+        type: array
+        description: Campo para preenchimento dos campos auxiliares do portador.
+        items:
+          "$ref": "#/definitions/ItemCargaLoteRequest"
+      observacao:
+        type: string
+        description: Campo de preenchimento com a observação da carga.
+      tipoChave:
+        type: string
+        description: Campo de preenchimento com o tipo de chave ('C' para CPF, 'M'
+          para Matrícula, 'D' para Conta + Dígito ou 'N' para Número do cartão).
+      tipoLancamento:
+        type: string
+        description: Campo de preenchimento com o tipo de lançamento ('C' para Crédito
+          ou 'D' para Débito).
+    description: Parâmetros de requisição para carga de crédito/débito em lote
+  ItemCargaLoteRequest:
+    type: object
+    required:
+    - chave
+    - valor
+    properties:
+      chave:
+        type: string
+        description: Campo de preenchimento com a chave para realizar a carga
+      valor:
+        type: number
+        format: double
+        description: Campo para preenchimento do valor da carga para o portador.
+    description: Item da requisição para carga de crédito/débito em lote
+  TransacaoResponse:
+    type: object
+    properties:
+      codigoResposta:
+        type: string
+        description: Código de Resposta da Transação Financeira.
+      dataAutorizacao:
+        type: string
+        description: Data da realização da Transação Financeira no fuso horário do
+          Autorizador (ddMMyyyy).
+      dataHoraAutorizacao:
+        type: string
+        format: date-time
+        description: 'Data/Hora da autorização da Transação Financeira  (YYYY-MM-DDTHH:MM:SS).
+          Ex: 2017-05-11T20:10:21'
+      dataHoraTransacao:
+        type: string
+        format: date-time
+        description: 'Data/Hora da realização da Transação Financeira  (YYYY-MM-DDTHH:MM:SS).
+          Ex: 2017-05-11T20:10:21'
+      descricaoResposta:
+        type: string
+        description: Nome do Portador que realizou a Transação Financeira.
+      horaAutorizacao:
+        type: string
+        description: Hora da realização da Transação Financeira no fuso horário do
+          Autorizador (HHMMSS).
+      idCartao:
+        type: integer
+        format: int64
+        description: Identificação do Cartão a ter a Transação Financeira realizada.
+      nomePortador:
+        type: string
+        description: Nome do Portador que realizou a Transação Financeira.
+      nsuAutorizador:
+        type: string
+        description: NSU do Autorizador da Transação Financeira.
+      nsuOrigem:
+        type: string
+        description: NSU Origem da Transação Financeira.
+      saldoDisponivel:
+        type: number
+        format: double
+        description: Saldo disponível do portador.
+      tipoTransacao:
+        type: integer
+        format: int32
+        description: 'Tipo de Transação Financeira realizada. Opções aceitas: 1: Compra
+          com cartão (Cash Out), 2: Saque com cartão (Cash Out), 3: Pagamento de conta
+          com cartão (Cash Out), 4: Crédito cartão (Cash In), 5: Crédito cartão via
+          boleto de pagamento (Cash In), 6: Crédito cartão via débito em conta (Cash
+          In), 7: Crédito cartão via cartão de crédito (Cash In),8: Cancelamento de
+          Cash-Out,9: Cancelamento de Saque,10: Cancelamento de Cash-In.'
+      valor:
+        type: number
+        format: double
+        description: Valor da Transação Financeira.
+  ItemPagamentoCargaCredito:
+    type: object
+    properties:
+      cpf:
+        type: string
+      id:
+        type: integer
+        format: int64
+      idConta:
+        type: integer
+        format: int64
+      numeroCartao:
+        type: string
+      valor:
+        type: number
+        format: double
+  CartaoLojaResponse:
+    type: object
+    properties:
+      cvv:
+        type: string
+        example: '123'
+      dataEmissao:
+        type: string
+        format: date
+        example: 11-12-2016
+      dataValidade:
+        type: string
+        format: date
+        example: 11-12-2020
+      id:
+        type: integer
+        format: int64
+        example: '1234'
+        description: Identificador do cartão
+      nome:
+        type: string
+        example: Bruno L. N. Costa
+      numeroCartaoCriptografado:
+        type: string
+        example: opr029347t6c93mro
+      numeroMascarado:
+        type: string
+        example: 1234.XXXX.XXXX.1234
+        description: Numero do cartao mascarado.
+      status:
+        type: string
+        description: Status do cartão.
+        enum:
+        - A
+        - B
+        - T
+        - I
