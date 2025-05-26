@@ -39,6 +39,8 @@ class MailController {
         path: file.path,
       }));
 
+    const nodemailerdebug = process.env.NODEMAILER_DEBUG === 'true' || false;
+
     const result = await Mail.sendMail(
       {
         host: profileExists.smtp_server,
@@ -49,6 +51,8 @@ class MailController {
           user: profileExists.email,
           pass: password,
         },
+        logger: nodemailerdebug, // ajuda a depurar
+        debug: nodemailerdebug,
       },
       html !== null && html
         ? {
